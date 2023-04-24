@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PROJETO EM TESTE</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+      }
+
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+
+      #container {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      #lottie-container {
+        width: 300px;
+        height: 300px;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      #messages-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      }
+
+      #messages {
+        margin-bottom: 20px;
+      }
+
+      #messages p {
+        margin: 0 0 10px 0;
+      }
+
+      #message-form {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        margin-top: 20px;
+      }
+
+      #message-input {
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: none;
+        outline: none;
+        margin-right: 5px;
+      }
+
+      #message-form button {
+        padding: 15px 30px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: none;
+        outline: none;
+        background-color: #333;
+        color: #fff;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Chat Dart</h1>
+    <div id="container">
+      <div id="lottie-container"></div>
+      <div id="messages-container">
+        <div id="messages"></div>
+        <form id="message-form">
+          <input type="text" id="message-input" placeholder="Digite sua mensagem...">
+          <button type="submit">Enviar</button>
+        </form>
+      </div>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.8/lottie.min.js"></script>
+    <script>
+      var lottieContainer = document.getElementById('lottie-container');
+
+      lottie.loadAnimation({
+        container: lottieContainer,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: 'https://assets3.lottiefiles.com/packages/lf20_vfpu2rpp.json',
+        xhrHeaders: { 'Content-Type': 'application/json' },
+        responseType: 'text'
+      });
+
+      var ws = new WebSocket('ws://' + window.location.host + '/ws');
+      var messagesContainer = document.getElementById('messages');
+      var messageForm = document.getElementById('message-form');
+      var messageInput = document.getElementById('message-input');
+
+      ws.onmessage = function (event) {
+        var messageData = JSON.parse(event.data);
+        var message = messageData.name + ': ' + messageData.message;
+        var messageElement = document.createElement('p');
+        messageElement.textContent = message;
+        messagesContainer.appendChild(messageElement);
+      };
+
+      messageForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        var message = messageInput.value;
+        ws.send(message);
+        messageInput.value = '';
+      });
+    </script>
+  </body>
+</html>
