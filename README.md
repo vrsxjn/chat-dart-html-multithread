@@ -1,4 +1,5 @@
-A simple command-line application.
+#Chat Dart Html Multithread
 
-Created from templates made available by Stagehand under a BSD-style
-[license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
+Um projeto que busco melhora muito ainda
+
+![image](https://user-images.githubusercontent.com/47954728/234015578-2f7f6620-1533-475c-ad11-e1fd92220dd9.png)
